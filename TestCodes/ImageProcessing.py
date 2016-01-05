@@ -1,6 +1,5 @@
 #!/usr/bin/python
 import cv2
-import cv
 import numpy as np
 
 
