@@ -27,11 +27,25 @@ def Recognition():
         )
         for (x, y, w, h) in stopps:
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+            cv2.putText(frame, 'STOP', (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+
+        threshold = 150;
         for (x, y, w, h) in lights:
+            roi = gray[y+10:y + h-10, x+10:x + w-10]      #Area of Interest
+            mask = cv2.GaussianBlur(roi, (25, 25), 0)
+            (minVal, maxVal, minLoc, maxLoc) = cv2.minMaxLoc(mask)
+            if maxVal - minVal > threshold:
+                cv2.circle(roi, maxLoc, 5, (255, 0, 0), 2)
+
+                if 1.0/8*(h-30) < maxLoc[1] < 4.0/8*(h-30):
+                    cv2.putText(frame, 'Red', (x+5, y-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+
+                elif 5.5/8*(h-30) < maxLoc[1] < h-30:
+                    cv2.putText(frame, 'Green', (x+5, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
             cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
         cv2.imshow('Video', frame)
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        if cv2.waitKey(100) & 0xFF == ord('q'):
             break
 
     video_capture.release()
