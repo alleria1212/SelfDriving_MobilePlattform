@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import road
 
 def nothing(x):
     pass
@@ -7,10 +8,58 @@ def nothing(x):
 def PrintImgSize(img):
 	print(np.size(img,0),np.size(img,1))
 
+def LaneTracking2Vid():
+	video_capture = cv2.VideoCapture(0)
+	lane_detector = road.LaneDetection(verbose=True)
+	while True:
+		ret, frame = video_capture.read()
+		gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+		lane_detector.analyse_image(frame)
+		if lane_detector.have_lane():
+			Lane = lane_detector.get_lane()
+			center = lane_detector.get_center_line()
+			cv2.line(frame, (center.top.x, center.top.y),
+				(center.bottom.x, center.bottom.y),
+				(12, 128, 232), 2, cv2.CV_AA)
+			cv2.line(frame, (center.left.x, center.left.y),
+				(center.left.x, center.left.y),
+				(12, 128, 232), 2, cv2.CV_AA)
+			cv2.line(frame, (center.right.x, center.right.y),
+				(center.right.x, center.right.y),
+				(12, 128, 232), 2, cv2.CV_AA)
+
+		cv2.imshow('Video', frame)
+		if cv2.waitKey(100) & 0xFF == ord('q'):
+			break
+	video_capture.release()
+	cv2.destroyAllWindows()
+
+def LaneTracking2Img():
+	img = cv2.imread('street2.jpg')
+	#cv2.imshow('original',img)
+	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)	
+	lane_detector = road.LaneDetection(verbose=True)
+	lane_detector.analyse_image(img)
+	if lane_detector.have_lane():
+            Lane = lane_detector.get_lane()
+            center = lane_detector.get_center_line()
+
+            cv2.line(img, (center.top.x, center.top.y),
+                     (center.bottom.x, center.bottom.y),
+                     (12, 128, 232), 2, cv2.CV_AA)
+
+            cv2.line(img, (Lane.left.top.x, Lane.left.top.y),
+                     (Lane.left.bottom.x, Lane.left.bottom.y),
+                     (0, 0, 255), 2, cv2.CV_AA)
+            cv2.line(img, (Lane.right.top.x, Lane.right.top.y),
+                     (Lane.right.bottom.x, Lane.right.bottom.y),
+                     (255, 0, 0), 2, cv2.CV_AA)
+	cv2.imshow('original',img)
+	cv2.waitKey(-1)
+
 def LaneTracking():
 	img = cv2.imread('street1.jpg')
 	cv2.imshow('original',img)
-
 	#cv2.resize(img,img,(640,320))
 	#img = img [:1300,100:1200]
 	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -52,6 +101,7 @@ def LaneTracking():
 
 def main():
 	print('ok')
-	LaneTracking()
+	LaneTracking2Vid()
+	#LaneTracking2Vid()
 if __name__ == "__main__":
 	main()
