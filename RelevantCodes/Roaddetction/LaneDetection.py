@@ -35,7 +35,7 @@ def LaneTracking2Vid():
 	cv2.destroyAllWindows()
 
 def LaneTracking2Img():
-	img = cv2.imread('street2.jpg')
+	img = cv2.imread('new2.jpg')
 	#cv2.imshow('original',img)
 	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)	
 	lane_detector = road.LaneDetection(verbose=True)
@@ -101,7 +101,7 @@ def LaneTracking():
 
 def main():
 	print('ok')
-	LaneTracking2Vid()
+	LaneTracking2Img()
 	#LaneTracking2Vid()
 if __name__ == "__main__":
 	main()
