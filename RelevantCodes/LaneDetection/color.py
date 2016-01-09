@@ -20,7 +20,6 @@ def getCentroid(img,height,width):
 		return a,b
 	return height,width
 
-
 def trackFinal():
 	video_capture = cv2.VideoCapture(0)
 
@@ -82,7 +81,7 @@ def trackFinal():
 
 		#threshed = cv2.arrowedLine = (threshed,(480,720),(cx,cy),(255,0,0),3,8,3)
 		cv2.imshow('lane', threshed)
-		if cv2.waitKey(1000) & 0xFF == ord('q'):
+		if cv2.waitKey(100) & 0xFF == ord('q'):		#10 FPS
 			break
 
 	video_capture.release()
