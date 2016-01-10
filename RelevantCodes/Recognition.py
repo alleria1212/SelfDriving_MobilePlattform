@@ -47,7 +47,8 @@ def Recognition():
                     cv2.putText(frame, 'Green', (x+5, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
             cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
         cv2.imshow('Video', frame)
-        if cv2.waitKey(100) & 0xFF == ord('q'):
+        SaveData(frame)
+        if cv2.waitKey(5000) & 0xFF == ord('q'):
             break
 
     video_capture.release()
